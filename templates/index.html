@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCPD Threat Detection System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="crt-overlay"></div>
+    <div class="scanline"></div>
+    
+    <div class="container">
+        <header class="cyber-header">
+            <h1>SYS//NCPD_THREAT_DETECT</h1>
+            <div class="status-badge" id="statusBadge">STATUS: SECURE</div>
+        </header>
+
+        <main class="grid-layout">
+            <div class="video-panel">
+                <div class="panel-header">LIVE_FEED // USB_CAM_01</div>
+                <div class="video-wrapper">
+                    <!-- The MJPEG Stream -->
+                    <img id="videoStream" src="{{ url_for('video_feed') }}" alt="Camera Feed Loading...">
+                    <div class="crosshair"></div>
+                </div>
+            </div>
+
+            <div class="stats-panel">
+                <div class="panel-header">SYSTEM_METRICS</div>
+                
+                <div class="stat-box">
+                    <div class="stat-label">ANOMALY_COUNT</div>
+                    <div class="stat-value neon-pink" id="anomalyCount">0</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-label">LAST_DETECTED</div>
+                    <div class="stat-value neon-cyan" id="lastAnomaly">None</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-label">TIME_SINCE_LAST</div>
+                    <div class="stat-value" id="timeSince">N/A</div>
+                </div>
+            </div>
+
+            <div class="log-panel">
+                <div class="panel-header">EVENT_LOG</div>
+                <ul id="logList" class="log-list">
+                    <!-- Logs populated via JS -->
+                </ul>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function updateStats() {
+            fetch('/stats')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('anomalyCount').innerText = data.anomaly_count;
+                    document.getElementById('lastAnomaly').innerText = data.last_anomaly;
+                    document.getElementById('timeSince').innerText = data.time_since_last;
+
+                    const logList = document.getElementById('logList');
+                    logList.innerHTML = '';
+                    data.current_log.forEach(log => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<span class="log-time">[${log.time}]</span> <span class="log-type">${log.type}:</span> <span class="log-detail">${log.details}</span>`;
+                        logList.appendChild(li);
+                    });
+
+                    const statusBadge = document.getElementById('statusBadge');
+                    if (data.anomaly_count > 0 && data.time_since_last !== "N/A" && parseInt(data.time_since_last) < 10) {
+                        statusBadge.innerText = "STATUS: THREAT DETECTED";
+                        statusBadge.classList.add("danger");
+                    } else {
+                        statusBadge.innerText = "STATUS: SECURE";
+                        statusBadge.classList.remove("danger");
+                    }
+                })
+                .catch(err => console.error("Error fetching stats:", err));
+        }
+
+        // Poll every 1 second
+        setInterval(updateStats, 1000);
+        updateStats();
+    </script>
+</body>
+</html>

@@ -3,6 +3,8 @@
 ## Overview
 
 This project implements a real-time anomaly detection system using object detection. It is designed to run on NVIDIA Jetson devices and also supports execution on Windows systems.
+The application automatically detects the runtime environment.
+If Jetson libraries are unavailable, it falls back to a CPU-based YOLOv8 implementation.
 
 The system monitors a live camera feed and flags anomalies based on predefined rules such as object count violations and forbidden object detection.
 
@@ -74,6 +76,10 @@ Camera → Object Detection → Rule Engine → Logging → Web UI
 
 ![UI](screenshots/UI.png)
 
+### logs
+
+![logs](screenshots/logs.png)
+
 ---
 
 ## Output
@@ -95,12 +101,19 @@ Timestamp, Anomaly_Type, Details
 Run inside the jetson-inference Docker container:
 
 ```bash
+sudo docker run -it --rm \
+--runtime nvidia \
+--network host \
+--volume /home/<username>/Desktop/Anomaly:/workspace/Anomaly \
+dustynv/jetson-inference:r35.4.1
+cd /workspace/Anomaly
 python3 app.py
 ```
 
 Then open:
+```
 http://<jetson-ip>:5000
-
+```
 ---
 
 ### On Windows

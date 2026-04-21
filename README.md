@@ -56,7 +56,7 @@ Camera → detectNet → Rule Engine → UI + Logging
 
 ### Full System UI
 
-![UI](screenshots/ui.png)
+![UI](screenshots/UI.png)
 
 ---
 

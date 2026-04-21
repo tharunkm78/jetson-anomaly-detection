@@ -1,6 +1,6 @@
-# 🚨 Real-Time Anomaly Detection System (Jetson Orin Nano)
+# Real-Time Anomaly Detection System (Jetson Orin Nano)
 
-## 📌 Overview
+## Overview
 
 This project implements a real-time anomaly detection system using NVIDIA Jetson Orin Nano and object detection.
 
@@ -13,7 +13,7 @@ A Cyberpunk-style UI displays live results with anomaly logs and statistics.
 
 ---
 
-## 🧠 Approach
+## Approach
 
 ### Object Detection
 
@@ -48,19 +48,19 @@ Camera → detectNet → Rule Engine → UI + Logging
 
 ---
 
-## 📊 Results
+## Results
 
-### 🔴 Anomaly Detection Example
+### Anomaly Detection Example
 
 ![Anomaly](screenshots/anomaly_detected.png)
 
-### 🟢 Full System UI
+### Full System UI
 
 ![UI](screenshots/ui.png)
 
 ---
 
-## 📁 Output
+## Output
 
 * anomaly_log.csv → stores timestamped anomalies
 
@@ -70,7 +70,7 @@ Timestamp, Anomaly_Type, Details
 
 ---
 
-## ⚙️ How to Run
+## How to Run
 
 ```bash
 python3 app.py
@@ -84,7 +84,7 @@ http://<jetson-ip>:5000
 
 ---
 
-## 🚀 Key Highlights
+## Key Highlights
 
 * Real-time GPU inference on Jetson
 * Rule-based anomaly detection
@@ -92,9 +92,4 @@ http://<jetson-ip>:5000
 * Logging + cooldown system
 
 ---
-
-## 🔮 Future Improvements
-
-* Helmet detection (safety compliance)
-* Distance-based anomaly (crowd proximity)
 * Alert system (email/notification)
